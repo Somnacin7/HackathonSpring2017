@@ -12,22 +12,17 @@ public class OsuManager : MonoBehaviour {
     /// </summary>
     public Transform beatSpawnPoint;
 
-    private string BEAT =
-@"X00000X0X0000000X0X000X0X0000000
-0000X0000000X0000000X0000000X000";
-    private char[] leftBeats;
-    private char[] rightBeats;
+    private string BEAT = @"0000000000000000 0000000000000000 0000X00000000000 0000X00000000000 0000X0000000X000 0000X0000000X000 0000X0000000X000 00000000X0000000 00000000X0000000 00000000Y------- ----0000X0000000  00000000Y------- ----X0000000X000 0000X0000000Y--- --------Y------- ------------X000 0000X00000000000 00000000X0000000 0000X0000000X000 00000000Y------- ----X0000000X000 00000000X0000000 00000000X000X000 0000X0000000X000 0000000000000000 0000000000000000 0000000000000000 00000000X000X000 0000Y----------- ----0000X000X000 0000X0000000X000 00000000X000X000 00000000X0000000 00000000Y------- ----0000Y------- ----0000X0000000 Y--------------- Y--------------- Y--------------- 00000000X000X000 0000X0000000X000 0000Y----------- ----X0000000X000 0000Y----------- X00000000000X000 X00000000000X000 0000Y----------- ----0000X000X000 0000Y----------- X0000000X0000000 Y-----------X000 0000X0000000X000 0000X000Y------- ----0000X0000000 0000X000Y------- ----X0000000X000 0000X000Y------- ----X000Y------- ----X0000000X000 0000X0000000X000 X0000000X0000000 00000000X000X000 Y--------------- ----000000000000";
+    private char[] beats;
     private int currentBeat = 0;
-    private int currentPlayedBeat = -2  ;
+    private int currentPlayedBeat = -4  ;
 
     private BeatPattern beatPattern;
     private AudioSource audioSource;
 
     void Initialize()
     {
-        var beatLines = BEAT.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-        leftBeats = beatLines[0].ToCharArray();
-        rightBeats = beatLines[1].ToCharArray();
+        beats = BEAT.Replace(" ", String.Empty).ToCharArray();
 
         var beat = beatPrefab.GetComponent<Beat>();
         var clipLength = 3.0f;
@@ -45,26 +40,27 @@ public class OsuManager : MonoBehaviour {
     private void Awake()
     {
         InvokeRepeating("PlayBeat", 0, 60.0f / bpm / 4.0f);
-        Invoke("StartBeat", 60.0f / bpm);
+        Invoke("StartBeats", 60.0f / bpm);
     }
 
     void PlayBeat()
     {
+        var curBeatIndex = (currentBeat + 4) % beats.Length;
 
-        if (leftBeats[(currentBeat + 2) % leftBeats.Length] == 'X' || rightBeats[(currentBeat + 2) % leftBeats.Length] == 'X') {
+        if (beats[curBeatIndex] == 'X' || beats[curBeatIndex] == 'Y') {
             var spawnPos = beatPattern.GetBeatPosition(currentPlayedBeat);
             Instantiate(beatPrefab, spawnPos, Quaternion.identity);
             currentPlayedBeat++;
         }
 
         currentBeat++;
-        if (currentBeat >= leftBeats.Length)
+        if (currentBeat >= beats.Length)
         {
             currentBeat = 0;
         }
     }
 
-    void StartBeat()
+    void StartBeats()
     {
         audioSource.Play();
     }

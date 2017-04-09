@@ -12,14 +12,16 @@ namespace Assets.Scripts
         public float sineFreq = 1.0f;
         public float sineAmp = 1.0f;
 
+        public float circleFreq = 1.0f; 
+            
         public override Vector3 GetBeatPosition(float input)
         {
             var pos = transform.position;
 
             float x, y, z;
 
-            x = pos.x + Mathf.Sin(input) * radius;
-            z = pos.z + Mathf.Cos(input) * radius;
+            x = pos.x + Mathf.Abs(Mathf.Sin(input * circleFreq)) * radius;
+            z = pos.z + Mathf.Cos(input * circleFreq) * radius;
 
             y = pos.y + sineAmp * Mathf.Sin(input * sineFreq) + heightOffset;
 

@@ -182,8 +182,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d69113c56e82bf4bbb709e10e80f5b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aliveTime: 1.5
-  animationSpeed: 2
+  aliveTime: 0.9230769
+  animationSpeed: 3.25
 --- !u!135 &135244606263001646
 SphereCollider:
   m_ObjectHideFlags: 1
