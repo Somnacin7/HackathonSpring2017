@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SteamVR_Controller))]
+[RequireComponent(typeof(SteamVR_TrackedObject))]
 [RequireComponent(typeof(VRHand))]
 public class OsuHand : MonoBehaviour {
 

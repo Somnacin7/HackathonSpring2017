@@ -7,8 +7,10 @@ public class OsuManager : MonoBehaviour {
 
     public GameObject beatPrefab;
     public int bpm = 130;
-    public Transform spawnLeft;
-    public Transform spawnRight;
+    /// <summary>
+    /// The center point of the beat spawns
+    /// </summary>
+    public Transform beatSpawnPoint;
 
     private string BEAT =
 @"X00000X0X0000000X0X000X0X0000000
@@ -35,18 +37,7 @@ public class OsuManager : MonoBehaviour {
 
     void PlayBeat()
     {
-        Debug.Log("BEAT");
-        if (leftBeats[currentBeat] == 'X')
-        {
-            Instantiate(beatPrefab, spawnLeft);
-            Debug.Log("LEFT");
-        }
-
-        if (rightBeats[currentBeat] == 'X')
-        {
-            Instantiate(beatPrefab, spawnRight);
-            Debug.Log("RIGHT");
-        }
+        // TODO: add math spawner
 
         currentBeat = (currentBeat + 1) % leftBeats.Length;
     }
