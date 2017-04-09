@@ -12,10 +12,10 @@ public class OsuManager : MonoBehaviour {
     /// </summary>
     public Transform beatSpawnPoint;
 
-    private string BEAT = @"0000 0000 0X00 0X00 0X0X 0X0X 0X0X 00X0 00X0 00Y- -0X0  00Y- -X0X 0X0Y --Y- ---X 0X00 00X0 0X0X 00Y- -X0X 00X0 00XX 0X0X 0000 0000 0000 00XX 0Y-- -0XX 0X0X 00XX 00X0 00Y- -0Y- -0X0 Y--- Y--- Y--- 00XX 0X0X 0Y-- -X0X 0Y-- X00X X00X 0Y-- -0XX 0Y-- X0X0 Y--X 0X0X 0XY- -0X0 0XY- -X0X 0XY- -XY- -X0X 0X0X X0X0 00XX Y--- -000";
+    private string BEAT = @"0000000000000000 0000000000000000 0000X00000000000 0000X00000000000 0000X0000000X000 0000X0000000X000 0000X0000000X000 00000000X0000000 00000000X0000000 00000000Y------- ----0000X0000000  00000000Y------- ----X0000000X000 0000X0000000Y--- --------Y------- ------------X000 0000X00000000000 00000000X0000000 0000X0000000X000 00000000Y------- ----X0000000X000 00000000X0000000 00000000X000X000 0000X0000000X000 0000000000000000 0000000000000000 0000000000000000 00000000X000X000 0000Y----------- ----0000X000X000 0000X0000000X000 00000000X000X000 00000000X0000000 00000000Y------- ----0000Y------- ----0000X0000000 Y--------------- Y--------------- Y--------------- 00000000X000X000 0000X0000000X000 0000Y----------- ----X0000000X000 0000Y----------- X00000000000X000 X00000000000X000 0000Y----------- ----0000X000X000 0000Y----------- X0000000X0000000 Y-----------X000 0000X0000000X000 0000X000Y------- ----0000X0000000 0000X000Y------- ----X0000000X000 0000X000Y------- ----X000Y------- ----X0000000X000 0000X0000000X000 X0000000X0000000 00000000X000X000 Y--------------- ----000000000000";
     private char[] beats;
     private int currentBeat = 0;
-    private int currentPlayedBeat = -2  ;
+    private int currentPlayedBeat = -4  ;
 
     private BeatPattern beatPattern;
     private AudioSource audioSource;
@@ -40,12 +40,12 @@ public class OsuManager : MonoBehaviour {
     private void Awake()
     {
         InvokeRepeating("PlayBeat", 0, 60.0f / bpm / 4.0f);
-        audioSource.PlayDelayed(60.0f / bpm);
+        Invoke("StartBeats", 60.0f / bpm);
     }
 
     void PlayBeat()
     {
-        var curBeatIndex = (currentBeat + 2) % beats.Length;
+        var curBeatIndex = (currentBeat + 4) % beats.Length;
 
         if (beats[curBeatIndex] == 'X' || beats[curBeatIndex] == 'Y') {
             var spawnPos = beatPattern.GetBeatPosition(currentPlayedBeat);
@@ -58,5 +58,10 @@ public class OsuManager : MonoBehaviour {
         {
             currentBeat = 0;
         }
+    }
+
+    void StartBeats()
+    {
+        audioSource.Play();
     }
 }

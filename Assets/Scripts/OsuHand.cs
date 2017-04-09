@@ -24,6 +24,7 @@ public class OsuHand : MonoBehaviour {
                 if (col.tag == "Beat")
                 {
                     Destroy(col.gameObject);
+                    vrHand.HapticPulse(2000);
                 }
             }
         }

@@ -27,4 +27,10 @@ public class VRHand : MonoBehaviour {
 
         ButtonUp = device.GetTouchUp(grabInput);
     }
+
+    public void HapticPulse(ushort duration)
+    {
+        var device = SteamVR_Controller.Input((int)controller.index);
+        device.TriggerHapticPulse(duration);
+    }
 }
