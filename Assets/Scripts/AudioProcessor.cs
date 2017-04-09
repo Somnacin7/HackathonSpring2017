@@ -21,10 +21,9 @@ using System.Text;
 
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 [RequireComponent (typeof(AudioSource))]
-class AudioProcessor {
+class AudioProcessor : MonoBehaviour {
 
     AudioSource audioSource;
 
