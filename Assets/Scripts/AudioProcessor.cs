@@ -26,6 +26,7 @@ using System.Collections;
 class AudioProcessor : MonoBehaviour {
 
     AudioSource audioSource;
+    int beatsPerMinute = 130;
 
     int bufferSize = 1024;
 
@@ -39,8 +40,6 @@ class AudioProcessor : MonoBehaviour {
     private float[] spec; // Spectrum of the previous step
     private int nBand = 12; // Number of bands
     public float gThresh = 0.1f; // Sensitivity
-    int blipDelayLen = 16;
-    int[] blipDelay;
     private int sinceLast = 0;
     private int colMax = 120;
     private float[] spectrum;
@@ -64,6 +63,8 @@ class AudioProcessor : MonoBehaviour {
         init();
 
         audioSource = GetComponent<AudioSource>();
+        float secondsPerBeat = 1f / (beatsPerMinute / 60f);
+        audioSource.PlayDelayed(secondsPerBeat * 2);
         samplingRate = audioSource.clip.frequency;
         framePeriod = (float)bufferSize / (float)samplingRate;
 
@@ -78,7 +79,6 @@ class AudioProcessor : MonoBehaviour {
     }
 
     void init() {
-        blipDelay = new int[blipDelayLen];
         onsets = new float[colMax];
         scorefun = new float[colMax];
         dobeat = new float[colMax];
@@ -110,7 +110,6 @@ class AudioProcessor : MonoBehaviour {
             // record largest value in (weighted) autocorrelation as it will be the tempo
             float aMax = 0.0f;
             int tempopd = 0;
-            //float[] acVals = new float[maxlag];
             for (int i = 0; i < maxLag; ++i) {
                 float acVal = (float)System.Math.Sqrt(auco.autoco(i));
                 if (acVal > aMax) {
@@ -140,11 +139,14 @@ class AudioProcessor : MonoBehaviour {
             scorefun[now] = smax;
             // keep the smallest value in the score fn window as zero, by subtracing the min val
             float smin = scorefun[0];
-            for (int i = 0; i < colMax; ++i)
-                if (scorefun[i] < smin)
+            for (int i = 0; i < colMax; ++i) {
+                if (scorefun[i] < smin) {
                     smin = scorefun[i];
-            for (int i = 0; i < colMax; ++i)
+                }
+            }
+            for (int i = 0; i < colMax; ++i) {
                 scorefun[i] -= smin;
+            }
 
             /* find the largest value in the score fn window, to decide if we emit a blip */
             smax = scorefun[0];
@@ -156,30 +158,41 @@ class AudioProcessor : MonoBehaviour {
                 }
             }
 
+            bool beat = false;
+
             // dobeat array records where we actally place beats
             dobeat[now] = 0;  // default is no beat this frame
             ++sinceLast;
             // if current value is largest in the array, probably means we're on a beat
             if (smaxix == now) {
-                //tapTempo();
                 // make sure the most recent beat wasn't too recently
                 if (sinceLast > tempopd / 4) {
                     onBeat.Invoke();
-                    blipDelay[0] = 1;
                     // record that we did actually mark a beat this frame
                     dobeat[now] = 1;
                     // reset counter of frames since last beat
                     sinceLast = 0;
+
+
+
+                    beat = true;
+
+                    System.IO.StreamWriter file = new System.IO.StreamWriter("c:\\Users\\Robin\\test.txt", true);
+                    file.Write("X");
+                    file.Close();
                 }
             }
 
+            if(!beat) {
+                System.IO.StreamWriter file = new System.IO.StreamWriter("c:\\Users\\Robin\\test.txt", true);
+                file.Write("0");
+                file.Close();
+            }
+
             /* update column index (for ring buffer) */
-            if (++now == colMax)
+            if (++now == colMax) {
                 now = 0;
-
-            //Debug.Log(System.Math.Round(60 / (tempopd * framePeriod)) + " bpm");
-            //Debug.Log(System.Math.Round(auco.avgBpm()) + " bpm");
-
+            }
         }
     }
 
