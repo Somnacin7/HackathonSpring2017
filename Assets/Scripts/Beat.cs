@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Beat : MonoBehaviour {
 
+    public float aliveTime = .1f;
+
 	void Awake () {
-        Invoke("Destroy", 0.1f);
+        Invoke("Destroy", aliveTime);
 	}
 
     void Destroy()
