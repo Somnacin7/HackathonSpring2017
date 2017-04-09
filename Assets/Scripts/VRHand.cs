@@ -8,14 +8,11 @@ public class VRHand : MonoBehaviour {
     ulong grabInput;
     SteamVR_TrackedObject controller;
 
-    public delegate void ButtonDown();
-    public event ButtonDown OnButtonDown;
+    public bool ButtonDown { get; set; }
 
-    public delegate void Button();
-    public event Button OnButton;
+    public bool Button { get; set; }
 
-    public delegate void ButtonUp();
-    public event ButtonUp OnButtonUp;
+    public bool ButtonUp { get; set; }
 
     void Awake () {
         controller = GetComponent<SteamVR_TrackedObject>();
@@ -24,51 +21,10 @@ public class VRHand : MonoBehaviour {
 	
 	void Update () {
         var device = SteamVR_Controller.Input((int)controller.index);
-        if (device.GetTouchDown(grabInput)) {
-            if (OnButtonDown != null) {
-                OnButtonDown();
-            }
-            Debug.Log("BasdfasdD");
+        ButtonDown = device.GetTouchDown(grabInput);
 
-        }
+        Button = device.GetTouch(grabInput);
 
-        if (device.GetTouch(grabInput) && OnButton != null)
-        {
-            OnButton();
-        }
-
-        if (device.GetTouchUp(grabInput) && OnButtonUp != null)
-        {
-            OnButtonUp();
-        }
-    }
-
-    private void OnEnable()
-    {
-        OnButtonDown += BD;
-        OnButton += B;
-        OnButtonUp += BU;
-    }
-
-    private void OnDisable()
-    {
-        OnButtonDown -= BD;
-        OnButton -= B;
-        OnButtonUp -= BU;
-    }
-
-    void BD()
-    {
-        Debug.Log("BD");
-    }
-
-    void B()
-    {
-        Debug.Log("B");
-    }
-
-    void BU()
-    {
-        Debug.Log("BU");
+        ButtonUp = device.GetTouchUp(grabInput);
     }
 }
