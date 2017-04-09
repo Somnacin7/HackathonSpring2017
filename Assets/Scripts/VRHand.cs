@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SteamVR_TrackedObject))]
-public class VRHand : MonoBehaviour {
+public class VRHand : MonoBehaviour
+{
 
     ulong grabInput;
     SteamVR_TrackedObject controller;
@@ -14,12 +15,14 @@ public class VRHand : MonoBehaviour {
 
     public bool ButtonUp { get; set; }
 
-    void Awake () {
+    void Awake()
+    {
         controller = GetComponent<SteamVR_TrackedObject>();
         grabInput = SteamVR_Controller.ButtonMask.Trigger;
-	}
-	
-	void Update () {
+    }
+
+    void Update()
+    {
         var device = SteamVR_Controller.Input((int)controller.index);
         ButtonDown = device.GetTouchDown(grabInput);
 
