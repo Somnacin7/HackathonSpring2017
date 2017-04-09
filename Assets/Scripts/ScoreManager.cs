@@ -35,7 +35,15 @@ public class ScoreManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         scoreText.text = scorePrefix + "\n" + score;
-	}
+
+        var scoreNumber = GameObject.FindGameObjectWithTag("ScoreNumber");
+        if (scoreNumber != null)
+        {
+            var scoreNumberText = scoreNumber.GetComponent<TextMesh>();
+            scoreNumberText.text = "" + score;
+
+        }
+    }
 
     private void OnEnable()
     {
