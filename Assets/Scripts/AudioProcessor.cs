@@ -95,104 +95,104 @@ class AudioProcessor : MonoBehaviour {
             computeAverages(spectrum);
             onSpectrum.Invoke(averages);
 
-            float onset = 0;
-            for(int n = 0; n < nBand; n++) {
-                float specVal = (float)System.Math.Max(-100.0, 20.0 * System.Math.Log10(averages[n]) + 160) * 0.025f;
-                float dbInc = specVal - spec[n]; // decibel increase since last frame
-                spec[n] = specVal;
-                onset += dbInc;
-            }
+            //float onset = 0;
+            //for(int n = 0; n < nBand; n++) {
+            //    float specVal = (float)System.Math.Max(-100.0, 20.0 * System.Math.Log10(averages[n]) + 160) * 0.025f;
+            //    float dbInc = specVal - spec[n]; // decibel increase since last frame
+            //    spec[n] = specVal;
+            //    onset += dbInc;
+            //}
 
-            onsets[now] = onset;
+            //onsets[now] = onset;
 
-            auco.newVal(onset);
+            //auco.newVal(onset);
 
-            // record largest value in (weighted) autocorrelation as it will be the tempo
-            float aMax = 0.0f;
-            int tempopd = 0;
-            for (int i = 0; i < maxLag; ++i) {
-                float acVal = (float)System.Math.Sqrt(auco.autoco(i));
-                if (acVal > aMax) {
-                    aMax = acVal;
-                    tempopd = i;
-                }
-                // store in array backwards, so it displays right-to-left, in line with traces
-                acVals[maxLag - 1 - i] = acVal;
-            }
+            //// record largest value in (weighted) autocorrelation as it will be the tempo
+            //float aMax = 0.0f;
+            //int tempopd = 0;
+            //for (int i = 0; i < maxLag; ++i) {
+            //    float acVal = (float)System.Math.Sqrt(auco.autoco(i));
+            //    if (acVal > aMax) {
+            //        aMax = acVal;
+            //        tempopd = i;
+            //    }
+            //    // store in array backwards, so it displays right-to-left, in line with traces
+            //    acVals[maxLag - 1 - i] = acVal;
+            //}
 
-            /* calculate DP-ish function to update the best-score function */
-            float smax = -999999;
-            int smaxix = 0;
-            // weight can be varied dynamically with the mouse
-            alph = 100 * gThresh;
-            // consider all possible preceding beat times from 0.5 to 2.0 x current tempo period
-            for (int i = tempopd / 2; i < System.Math.Min(colMax, 2 * tempopd); ++i) {
-                // objective function - this beat's cost + score to last beat + transition penalty
-                float score = onset + scorefun[(now - i + colMax) % colMax] - alph * (float)System.Math.Pow(System.Math.Log((float)i / (float)tempopd), 2);
-                // keep track of the best-scoring predecesor
-                if (score > smax) {
-                    smax = score;
-                    smaxix = i;
-                }
-            }
+            ///* calculate DP-ish function to update the best-score function */
+            //float smax = -999999;
+            //int smaxix = 0;
+            //// weight can be varied dynamically with the mouse
+            //alph = 100 * gThresh;
+            //// consider all possible preceding beat times from 0.5 to 2.0 x current tempo period
+            //for (int i = tempopd / 2; i < System.Math.Min(colMax, 2 * tempopd); ++i) {
+            //    // objective function - this beat's cost + score to last beat + transition penalty
+            //    float score = onset + scorefun[(now - i + colMax) % colMax] - alph * (float)System.Math.Pow(System.Math.Log((float)i / (float)tempopd), 2);
+            //    // keep track of the best-scoring predecesor
+            //    if (score > smax) {
+            //        smax = score;
+            //        smaxix = i;
+            //    }
+            //}
 
-            scorefun[now] = smax;
-            // keep the smallest value in the score fn window as zero, by subtracing the min val
-            float smin = scorefun[0];
-            for (int i = 0; i < colMax; ++i) {
-                if (scorefun[i] < smin) {
-                    smin = scorefun[i];
-                }
-            }
-            for (int i = 0; i < colMax; ++i) {
-                scorefun[i] -= smin;
-            }
+            //scorefun[now] = smax;
+            //// keep the smallest value in the score fn window as zero, by subtracing the min val
+            //float smin = scorefun[0];
+            //for (int i = 0; i < colMax; ++i) {
+            //    if (scorefun[i] < smin) {
+            //        smin = scorefun[i];
+            //    }
+            //}
+            //for (int i = 0; i < colMax; ++i) {
+            //    scorefun[i] -= smin;
+            //}
 
-            /* find the largest value in the score fn window, to decide if we emit a blip */
-            smax = scorefun[0];
-            smaxix = 0;
-            for (int i = 0; i < colMax; ++i) {
-                if (scorefun[i] > smax) {
-                    smax = scorefun[i];
-                    smaxix = i;
-                }
-            }
+            ///* find the largest value in the score fn window, to decide if we emit a blip */
+            //smax = scorefun[0];
+            //smaxix = 0;
+            //for (int i = 0; i < colMax; ++i) {
+            //    if (scorefun[i] > smax) {
+            //        smax = scorefun[i];
+            //        smaxix = i;
+            //    }
+            //}
 
-            bool beat = false;
+            //bool beat = false;
 
-            // dobeat array records where we actally place beats
-            dobeat[now] = 0;  // default is no beat this frame
-            ++sinceLast;
-            // if current value is largest in the array, probably means we're on a beat
-            if (smaxix == now) {
-                // make sure the most recent beat wasn't too recently
-                if (sinceLast > tempopd / 4) {
-                    onBeat.Invoke();
-                    // record that we did actually mark a beat this frame
-                    dobeat[now] = 1;
-                    // reset counter of frames since last beat
-                    sinceLast = 0;
+            //// dobeat array records where we actally place beats
+            //dobeat[now] = 0;  // default is no beat this frame
+            //++sinceLast;
+            //// if current value is largest in the array, probably means we're on a beat
+            //if (smaxix == now) {
+            //    // make sure the most recent beat wasn't too recently
+            //    if (sinceLast > tempopd / 4) {
+            //        onBeat.Invoke();
+            //        // record that we did actually mark a beat this frame
+            //        dobeat[now] = 1;
+            //        // reset counter of frames since last beat
+            //        sinceLast = 0;
 
 
 
-                    beat = true;
+            //        beat = true;
 
-                    System.IO.StreamWriter file = new System.IO.StreamWriter("c:\\Users\\Robin\\test.txt", true);
-                    file.Write("X");
-                    file.Close();
-                }
-            }
+            //        System.IO.StreamWriter file = new System.IO.StreamWriter("c:\\Users\\Robin\\test.txt", true);
+            //        file.Write("X");
+            //        file.Close();
+            //    }
+            //}
 
-            if(!beat) {
-                System.IO.StreamWriter file = new System.IO.StreamWriter("c:\\Users\\Robin\\test.txt", true);
-                file.Write("0");
-                file.Close();
-            }
+            //if(!beat) {
+            //    System.IO.StreamWriter file = new System.IO.StreamWriter("c:\\Users\\Robin\\test.txt", true);
+            //    file.Write("0");
+            //    file.Close();
+            //}
 
-            /* update column index (for ring buffer) */
-            if (++now == colMax) {
-                now = 0;
-            }
+            ///* update column index (for ring buffer) */
+            //if (++now == colMax) {
+            //    now = 0;
+            //}
         }
     }
 
