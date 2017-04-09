@@ -8,6 +8,9 @@ public class OsuHand : MonoBehaviour {
 
     public float radius = 0.1f;
 
+    public delegate void DestroyBeat();
+    public event DestroyBeat OnDestroyBeat;
+
     private VRHand vrHand;
 
     void Start () {
@@ -24,6 +27,12 @@ public class OsuHand : MonoBehaviour {
                 if (col.tag == "Beat")
                 {
                     Destroy(col.gameObject);
+
+                    if (OnDestroyBeat != null)
+                    {
+                        OnDestroyBeat();
+                    }
+
                     vrHand.HapticPulse(2000);
                 }
             }
