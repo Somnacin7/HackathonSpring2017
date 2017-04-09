@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Hand
   - Beat
+  - OptionsBall
+  - PlayBall
+  - QuitBall
+  - ScoreNumber
   layers:
   - Default
   - TransparentFX

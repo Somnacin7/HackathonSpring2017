@@ -64,7 +64,7 @@ class AudioProcessor : MonoBehaviour {
 
         audioSource = GetComponent<AudioSource>();
         float secondsPerBeat = 1f / (beatsPerMinute / 60f);
-        audioSource.PlayDelayed(secondsPerBeat * 2);
+        //audioSource.PlayDelayed(secondsPerBeat * 2);
         samplingRate = audioSource.clip.frequency;
         framePeriod = (float)bufferSize / (float)samplingRate;
 

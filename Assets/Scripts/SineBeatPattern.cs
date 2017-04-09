@@ -20,7 +20,7 @@ namespace Assets.Scripts
 
             float x, y, z;
 
-            x = pos.x + Mathf.Abs(Mathf.Sin(input * circleFreq)) * radius;
+            x = pos.x + -Mathf.Abs(Mathf.Sin(input * circleFreq)) * radius;
             z = pos.z + Mathf.Cos(input * circleFreq) * radius;
 
             y = pos.y + sineAmp * Mathf.Sin(input * sineFreq) + heightOffset;

@@ -4,4 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenuVR.unity
+    guid: 1198c64964aa2b24aa8255650a322ea5
+  - enabled: 1
+    path: Assets/Scenes/osu2.unity
+    guid: faa082fcb903d484b9a5eff5585f2bfc
+  - enabled: 1
+    path: Assets/Scenes/EndScreen.unity
+    guid: 0c845d078dee71a47b5073bdc17880c7

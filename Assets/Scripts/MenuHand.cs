@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using UnityEngine.SceneManagement;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,8 +32,7 @@ public class MenuHand : MonoBehaviour
                 }
                 else if (col.tag == "PlayBall")
                 {
-                    // Start game
-                    // TODO
+                    SceneManager.LoadSceneAsync(1);
                 }
                 else if (col.tag == "QuitBall")
                 {

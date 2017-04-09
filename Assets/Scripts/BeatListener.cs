@@ -5,14 +5,12 @@ using UnityEngine;
 
 public class BeatListener : MonoBehaviour {
 
-    public GameObject beatPrefab;
     public GameObject volBarPrefab;
     public int bpm = 130;
 
     /// <summary>
     /// The center point of the beat spawns
     /// </summary>
-    public Transform beatSpawnPoint;
     private int currentBeat = 0;
     private int currentPlayedBeat = -2;
 
@@ -28,10 +26,7 @@ public class BeatListener : MonoBehaviour {
 
     void Initialize() {
         specBars = new GameObject[12];
-        var beat = beatPrefab.GetComponent<Beat>();
         var clipLength = 3.0f;
-        beat.animationSpeed = (clipLength / (60.0f / bpm)) / 4.0f;
-        beat.aliveTime = (60.0f / bpm) * 4.0f;
         xSpecValues = new float[] { -1.1f, -.09f, -0.7f, -0.5f, -0.3f, -0.1f, 0.1f, 0.3f, 0.5f, 0.7f, 0.9f, 1.1f };
 
         volBarSet = new VolBarSet();
@@ -49,12 +44,11 @@ public class BeatListener : MonoBehaviour {
     }
 
     private void Awake() {
-        Invoke("StartBeat", 60.0f / bpm);
+        //Invoke("StartBeat", 60.0f / bpm);
     }
 
     public void onBeatDetected() {
         var spawnPos = beatPattern.GetBeatPosition(currentPlayedBeat);
-        Instantiate(beatPrefab, spawnPos, Quaternion.identity);
         currentPlayedBeat++;
         currentBeat++;
     }
@@ -113,7 +107,7 @@ public class BeatListener : MonoBehaviour {
 
         public void resize(float[] spectrum) {
             for (int n = 0; n < 12; n++) {
-                float height = spectrum[n] * 8;
+                float height = spectrum[n] * 20;
                 cubes1[n].transform.localScale = new Vector3(width1, height, thickness);
                 cubes2[n].transform.localScale = new Vector3(width1, height, thickness);
                 cubes3[11 - n].transform.localScale = new Vector3(thickness, height, width2);
