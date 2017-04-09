@@ -58,6 +58,7 @@ class AudioProcessor : MonoBehaviour {
 
     [Header("Events")]
     public OnBeatEventHandler onBeat;
+    public OnSpectrumEventHandler onSpectrum;
 
     void Start() {
         init();
@@ -73,7 +74,7 @@ class AudioProcessor : MonoBehaviour {
 
         auco = new Autoco(maxLag, decay, framePeriod, getBandwidth());
 
-        lastT = getCurrentTimeMillis();
+        lastT = System.DateTime.Now.Ticks / System.TimeSpan.TicksPerMillisecond;
     }
 
     void init() {
@@ -86,18 +87,13 @@ class AudioProcessor : MonoBehaviour {
         acVals = new float[maxLag];
         alph = 100 * gThresh;
     }
-
-    private long getCurrentTimeMillis() {
-        return System.DateTime.Now.Ticks / System.TimeSpan.TicksPerMillisecond;
-    }
-
+    
     // Called once per frame
     void Update() {
         if(audioSource.isPlaying) {
             audioSource.GetSpectrumData(spectrum, 0, FFTWindow.BlackmanHarris);
             computeAverages(spectrum);
-
-
+            onSpectrum.Invoke(averages);
 
             float onset = 0;
             for(int n = 0; n < nBand; n++) {
@@ -225,6 +221,9 @@ class AudioProcessor : MonoBehaviour {
 
     [System.Serializable]
     public class OnBeatEventHandler : UnityEngine.Events.UnityEvent {}
+
+    [System.Serializable]
+    public class OnSpectrumEventHandler : UnityEngine.Events.UnityEvent<float[]> {}
 
     private class Autoco {
         private int delLength;
