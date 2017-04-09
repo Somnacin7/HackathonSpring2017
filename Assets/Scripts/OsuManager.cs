@@ -19,6 +19,8 @@ public class OsuManager : MonoBehaviour {
     private char[] rightBeats;
     private int currentBeat = 0;
 
+    private BeatPattern beatPattern;
+
     void Initialize()
     {
         var beatLines = BEAT.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
@@ -28,6 +30,8 @@ public class OsuManager : MonoBehaviour {
 
 	void Start () {
         Initialize();
+
+        beatPattern = GetComponent<BeatPattern>();
 	}
 
     private void Awake()
@@ -38,6 +42,8 @@ public class OsuManager : MonoBehaviour {
     void PlayBeat()
     {
         // TODO: add math spawner
+        var spawnPos = beatPattern.GetBeatPosition(currentBeat);
+        Instantiate(beatPrefab, spawnPos, Quaternion.identity);
 
         currentBeat = (currentBeat + 1) % leftBeats.Length;
     }
