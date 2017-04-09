@@ -35,6 +35,10 @@ public class OsuHand : MonoBehaviour {
 
                     vrHand.HapticPulse(2000);
                     vrHand.HapticPulse(2000);
+                    vrHand.HapticPulse(2000);
+                    vrHand.HapticPulse(2000);
+                    vrHand.HapticPulse(2000);
+                    vrHand.HapticPulse(2000);
                 }
             }
         }
